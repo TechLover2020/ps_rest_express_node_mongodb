@@ -11,4 +11,7 @@ gulp.task('default', function () {
     },
     ignore: ['./node_modules/**']
   })
+    .on('restart', function () {
+      console.log('restarting server ... ')
+    })
 })
