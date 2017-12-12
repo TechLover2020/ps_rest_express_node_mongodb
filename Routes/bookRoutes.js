@@ -46,6 +46,7 @@ var routes = function (Book) { // inject book model
       }
     })
   })
+
   // get an individual item
   bookRouter.route('/Books/:bookId')
   // http://localhost:3001/api/books/5a2aa16175faa5168d6c0346
@@ -66,6 +67,32 @@ var routes = function (Book) { // inject book model
       res.json(req.book)
       //   }
       // })
+    })
+    .delete((req, res) => {
+      // this works
+     // Book.remove({'_id': req.book._id}, (err) => {
+     //   if (err)
+     //     res.status(404).send('no delete operation done book')
+     //   else {
+     //     res.status(200).send('deleted '+req.book._id)
+     //   }
+     // })
+      req.book.remove((err) => {
+        if (err) {
+          res.status(500).send("can't delete "+err)
+        } else {
+          res.status(200).send('delete '+ req.book)
+        }
+      })
+    })
+    .patch((req, res) => {
+      if (req.body._id) {
+        delete req.body._id
+      }
+      for (var p in req.body) {
+        req.body[p] = req.body[p]
+      }
+      req.book.save()
     })
   return bookRouter
 }
