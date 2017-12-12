@@ -3,8 +3,11 @@ Mongodb - mongoose db
 show dbs
 use bookAPI
 show collections / tables
+db.createCollection('books')
+db.books.drop()
 db.books.find({})
 db.books.find().pretty()
 
+db.books.insert({'title':'Beauty and the Beast', 'author':'Disney Movies', 'genre':'computers', 'read':'false' })
 db.books.remove({'title:'aa win book'})
 
