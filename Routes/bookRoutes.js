@@ -2,7 +2,6 @@ var express = require('express')
 
 var routes = function (Book) { // inject book model
 
-
   var bookRouter = express.Router()
   var bookController = require('../controllers/bookController')(Book)
   bookRouter.route('/Books')
@@ -66,6 +65,7 @@ var routes = function (Book) { // inject book model
     .get((req, res) => {
       res.json(req.book)
     })
+    // update
     .put((req, res) => {
       // Book.findById(req.params.bookId, (err, book) => {
       //   if (err)
@@ -76,36 +76,48 @@ var routes = function (Book) { // inject book model
       req.book.author = req.body.author
       req.book.genre = req.body.genre
       req.book.read = req.body.read
-      req.book.save()
-      res.json(req.book)
+      // req.book.save()
+      req.book.save(function (err) {
+        if (err)
+          res.status(500).send(err)
+        else {
+          res.json(req.book)
+        }
+      })
+      // res.json(req.book)
       //   }
       // })
     })
     .delete((req, res) => {
       // this works
-     // Book.remove({'_id': req.book._id}, (err) => {
-     //   if (err)
-     //     res.status(404).send('no delete operation done book')
-     //   else {
-     //     res.status(200).send('deleted '+req.book._id)
-     //   }
-     // })
+      // Book.remove({'_id': req.book._id}, (err) => {
+      //   if (err)
+      //     res.status(404).send('no delete operation done book')
+      //   else {
+      //     res.status(200).send('deleted '+req.book._id)
+      //   }
+      // })
       req.book.remove((err) => {
         if (err) {
-          res.status(500).send("can't delete "+err)
+          res.status(500).send('can\'t delete ' + err)
         } else {
-          res.status(200).send('delete '+ req.book)
+          res.status(200).send('delete ' + req.book)
         }
       })
     })
-    .patch((req, res) => { // this don't work
-      if (req.body._id) {
+    .patch(function (req, res) {
+      if (req.body._id)
         delete req.body._id
-      }
       for (var p in req.body) {
-        req.body[p] = req.body[p]
+        req.book[p] = req.body[p]
       }
-      req.book.save()
+      req.book.save(function (err) {
+        if (err)
+          res.status(500).send(err)
+        else {
+          res.json(req.book)
+        }
+      })
     })
   return bookRouter
 }
