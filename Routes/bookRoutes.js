@@ -30,30 +30,42 @@ var routes = function (Book) { // inject book model
       })
     })
 
+  // use the middleware: will intercept rge request, go and fund bookid and it to the req, and forward it on to the route
+  // only applicable only in this route
+  bookRouter.use('/Books/:bookId', function (req, res, next) { // next will move to the next peice of middle ware.. in this case .. get or put
+    Book.findById(req.params.bookId, (err, book) => {
+      if (err) {
+        console.log(err)
+      }
+      else if (book) {
+        req.book = book // will be available in req.book
+        next()
+      }
+      else {
+        res.status(404).send('no book found')
+      }
+    })
+  })
   // get an individual item
   bookRouter.route('/Books/:bookId')
   // http://localhost:3001/api/books/5a2aa16175faa5168d6c0346
     .get((req, res) => {
-      Book.findById(req.params.bookId, (err, book) => {
-        if (err)
-          console.log(err)
-        else
-          res.json(book)
-      })
+      res.json(req.book)
     })
     .put((req, res) => {
-      Book.findById(req.params.bookId, (err, book) => {
-        if (err)
-          console.log(err)
-        else {
-          book.title = req.body.title
-          book.author = req.body.author
-          book.genre = req.body.genre
-          book.read = req.body.read
-          book.save()
-          res.json(book)
-        }
-      })
+      // Book.findById(req.params.bookId, (err, book) => {
+      //   if (err)
+      //     console.log(err)
+      //   else {
+      // at this point the it req.body has the details
+      req.book.title = req.body.title
+      req.book.author = req.body.author
+      req.book.genre = req.body.genre
+      req.book.read = req.body.read
+      req.book.save()
+      res.json(req.book)
+      //   }
+      // })
     })
   return bookRouter
 }
