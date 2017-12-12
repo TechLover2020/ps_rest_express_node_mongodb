@@ -2,41 +2,46 @@ var express = require('express')
 
 var routes = function (Book) { // inject book model
 
+
   var bookRouter = express.Router()
+  var bookController = require('../controllers/bookController')(Book)
   bookRouter.route('/Books')
   // use postman to post data into api
-    .post((req, res) => {
-      var book = new Book(req.body) // send body
-      console.log(book)
-      book.save() // this saves to the db
-      res.status(201).send(book) // send the book and the status send back
-    })
+  //   .post((req, res) => {
+  //     var book = new Book(req.body) // send body
+  //     console.log(book)
+  //     book.save() // this saves to the db
+  //     res.status(201).send(book) // send the book and the status send back
+  //   })
+    .post(bookController.post)
     // http://localhost:8000/api/Books/
     // http://localhost:3001/api/books/?genre=computers
     // http://localhost:3001/api/books/?author=John%20Morris
-    .get((req, res) => {
-      // var responseJson = {hello: "this is my api"}
-      // res.json(responseJson)
-      // var query = req.query // will extract the values in the query .. will filter through the db which isn't good
-      var query = {}
-      if (req.query.genre) {
-        query.genre = req.query.genre
-      }
-      Book.find(query, (err, books) => {
-        if (err)
-          console.log(err)
-        else {
-          var returnBooks = []
-          books.forEach(function (element, index, array) {
-            var newBook = element.toJSON()
-            newBook.links = {}
-            newBook.links.self = 'http://'+req.headers.host+'/api/Books/'+ newBook._id
-            returnBooks.push(newBook)
-          })
-          res.json(returnBooks)
-        }
-      })
-    })
+
+    // .get((req, res) => {
+    //   // var responseJson = {hello: "this is my api"}
+    //   // res.json(responseJson)
+    //   // var query = req.query // will extract the values in the query .. will filter through the db which isn't good
+    //   var query = {}
+    //   if (req.query.genre) {
+    //     query.genre = req.query.genre
+    //   }
+    //   Book.find(query, (err, books) => {
+    //     if (err)
+    //       console.log(err)
+    //     else {
+    //       var returnBooks = []
+    //       books.forEach(function (element, index, array) {
+    //         var newBook = element.toJSON()
+    //         newBook.links = {}
+    //         newBook.links.self = 'http://'+req.headers.host+'/api/Books/'+ newBook._id
+    //         returnBooks.push(newBook)
+    //       })
+    //       res.json(returnBooks)
+    //     }
+    //   })
+    // })
+    .get(bookController.get)
 
   // use the middleware: will intercept rge request, go and fund bookid and it to the req, and forward it on to the route
   // only applicable only in this route
@@ -93,7 +98,7 @@ var routes = function (Book) { // inject book model
         }
       })
     })
-    .patch((req, res) => {
+    .patch((req, res) => { // this don't work
       if (req.body._id) {
         delete req.body._id
       }
