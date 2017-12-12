@@ -1,0 +1,22 @@
+Uniform Interface:
+    Resources (noun)
+    Rest we deal with nouns
+    books & authors
+
+    Get: get resource
+    Post: add new resource
+    Delete: delete a resource
+    Put: updates the entire resource
+    Patch: updates a piece of that resource
+
+    Hypermedia of Engine as Application state
+
+Gulp:
+    to run series of tasks
+
+Install mongodb
+    mongoose : it takes mongo data into json object
+
+
+
+

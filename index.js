@@ -1,25 +1,16 @@
 var express = require('express')
 var mongoose = require('mongoose')
-var db = mongoose.connect('mongodb://localhost/bookAPI')
-var Book = require('./models/bookModel')
+var db = mongoose.connect('mongodb://localhost/bookAPI') // open a connecction to db
+var Book = require('./models/bookModel') // mongoose gets data out of mongodb via model
 var app = express()
+var bodyParser = require('body-parser') // read body and parse into json object
 
-var port = process.env.PORT || 3001
+var port = process.env.PORT || 8081
 
-var bookRouter = express.Router()
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended:true}))
+bookRouter =require('./Routes/bookRoutes')(Book)
 
-bookRouter.route('/Books')
-// http://localhost:8000/api/Books/
-  .get(function (req, res) {
-    // var responseJson = {hello: "this is my api"}
-    // res.json(responseJson)
-    Book.find(function (err, books) {
-      if (err)
-        console.log(err)
-      else
-        res.json(books)
-    })
-  })
 
 app.use('/api', bookRouter)
 

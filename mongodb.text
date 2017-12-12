@@ -1,0 +1,10 @@
+Mongodb - mongoose db
+
+show dbs
+use bookAPI
+show collections / tables
+db.books.find({})
+db.books.find().pretty()
+
+db.books.remove({'title:'aa win book'})
+

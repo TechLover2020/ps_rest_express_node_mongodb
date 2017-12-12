@@ -1,6 +1,0 @@
-before_script:
-  - npm install; npm install -g gulp
-script: node index.js
-language: node_js
-env:
-  - PORT=7777
