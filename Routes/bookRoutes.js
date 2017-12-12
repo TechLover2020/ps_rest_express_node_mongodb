@@ -25,8 +25,16 @@ var routes = function (Book) { // inject book model
       Book.find(query, (err, books) => {
         if (err)
           console.log(err)
-        else
-          res.json(books)
+        else {
+          var returnBooks = []
+          books.forEach(function (element, index, array) {
+            var newBook = element.toJSON()
+            newBook.links = {}
+            newBook.links.self = 'http://'+req.headers.host+'/api/Books/'+ newBook._id
+            returnBooks.push(newBook)
+          })
+          res.json(returnBooks)
+        }
       })
     })
 
