@@ -1,6 +1,8 @@
 var express = require('express')
 var mongoose = require('mongoose')
-var db = mongoose.connect('mongodb://localhost/bookAPI') // open a connecction to db
+// var db = mongoose.connect('mongodb://localhost/bookAPI') // open a connecction to local db
+var db = mongoose.connect('mongodb://john:john@ds129166.mlab.com:29166/ps_book_api') // open a connecction to cloud db
+
 var Book = require('./models/bookModel') // mongoose gets data out of mongodb via model
 
 var app = express()
